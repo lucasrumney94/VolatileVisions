@@ -7,16 +7,21 @@ using System.Collections.Generic;
 /// </summary>
 
 
-public class player : MonoBehaviour {
+public class Player : MonoBehaviour {
 
 	//public playerStats stats;
 	public playerEquipment equipment = new playerEquipment();
 	public playerInventory inventory = new playerInventory();
+	public playerStats stats;
+
 	public List<Item> Loot = new List<Item>();
 
 	void Start () 
 	{
-		Loot.Add(new Item("Megasword", 2, 2, SlotType.sword));
+		stats = new playerStats(equipment);
+		Loot.Add(new Item("megasword", 2, 3, SlotType.sword));
+		Loot.Add(new Item("weaksword", 1, 0, SlotType.sword));
+		Loot.Add(new Item("crappyhat", 0, 1, SlotType.head));
 	}
 	
 
@@ -31,11 +36,29 @@ public class player : MonoBehaviour {
 		if (Input.GetKeyUp(KeyCode.Z))
 		{
 			addItemtoInventory(Loot[0]);
+			addItemtoInventory(Loot[1]);//needs to be setup for plaintext
+			addItemtoInventory(Loot[2]);
+
 		}
 		if (Input.GetKeyUp(KeyCode.Space))    
 		{
-			equipItem(findItemWithName("Megasword",inventory.InventoryItems));
+			equipItem(findItemWithName("megasword",inventory.InventoryItems));
 		}
+		if (Input.GetKeyUp(KeyCode.S))
+		{
+			stats.calculateStats();
+			Debug.Log("attack is " + stats.attack);
+			Debug.Log("defense is " + stats.defense);
+		}
+		if (Input.GetKeyUp (KeyCode.I))
+		{
+			foreach (Item L in inventory.InventoryItems)
+			{	
+				if (L != null)
+					Debug.Log(L.Name);
+			}
+		}
+
 
 	}
 
@@ -48,32 +71,38 @@ public class player : MonoBehaviour {
 		inventory.InventoryItems.Remove(item);
 	}
 
-	
-	Item findItemWithName(string name, List<Item> list)
+
+	public Item findItemWithName(string name, List<Item> list)
 	{
 		foreach (Item J in list)
 		{
-			if (name == J.Name)
-				return J;
+			if (J != null)
+			{
+				if (name == J.Name)
+					return J;
+			}
 		}
 		return null;
 	}
 
-	void equipItem(Item item)
+	public void equipItem(Item item)
 	{
-
-		//if inventory contains this item
-		if (inventory.InventoryItems.Contains(item))
+		if (item != null)
 		{
-			//remove the item of that name from the inventory
-			inventory.InventoryItems.RemoveAll(delegate(Item x) {return x.Name == item.Name;});
-
-			//check which slot it matches
-			foreach (equipSlot i in equipment.EquipSlots)
+			//if inventory contains this item
+			if (inventory.InventoryItems.Contains(item))
 			{
-				if (item.itemSlotType == i.equipSlotType) //for the slot it matches
+				//remove the item of that name from the inventory
+				inventory.InventoryItems.RemoveAll(s => s != null && s.Name == item.Name);
+
+				//check which slot it matches
+				foreach (equipSlot i in equipment.EquipSlots)
 				{
-					i.EquippedHere = item;				//equip the item
+					if (item.itemSlotType == i.equipSlotType) //for the slot it matches
+					{
+						addItemtoInventory(i.EquippedHere);	//return the equipped item to inventory
+						i.EquippedHere = item;				//equip the item
+					}
 				}
 			}
 		}
@@ -90,10 +119,33 @@ public class player : MonoBehaviour {
 
 public class playerStats
 {
-	//public int calculateStat()
-	//{
-	//
-	//}
+	public playerEquipment equipment;
+	private int attackBase = 10;
+	private int defenseBase = 10;
+	public int attack;
+	public int defense;
+
+
+
+	public playerStats(playerEquipment Equipment)
+	{
+		this.equipment = Equipment;
+	}
+
+	public void calculateStats()
+	{
+		attack = attackBase;
+		defense = defenseBase;
+
+		foreach (equipSlot K in equipment.EquipSlots)
+		{
+			if (K.EquippedHere != null)
+			{
+				attack += K.EquippedHere.Attack;
+				defense += K.EquippedHere.Defense;
+			}
+		}
+	}
 }
 
 
@@ -105,10 +157,12 @@ public class playerInventory
 
 	public playerInventory()
 	{
-		InventoryItems.Add( new Item("",0,0,SlotType.head));
+		/*
+		InventoryItems.Add( new Item("",0,0,SlotType.head)); //dont think these are necessary?
 		InventoryItems.Add( new Item("",0,0,SlotType.armor));
 		InventoryItems.Add( new Item("",0,0,SlotType.sword));
 		InventoryItems.Add( new Item("",0,0,SlotType.dagger));
+		*/
 	}
 }
 
@@ -127,8 +181,6 @@ public class playerEquipment
 		EquipSlots.Add (new equipSlot(null,SlotType.sword));
 		EquipSlots.Add (new equipSlot(null,SlotType.dagger));
 	}
-	
-	
 }
 
 
@@ -141,7 +193,6 @@ public class Item
 	public string Name;
 	public int Attack;
 	public int Defense;
-	//public string SlotName; //now attempting to use enum rather than string
 	public SlotType itemSlotType;
 
 	public Item(string name, int attack, int defense, SlotType slotType)
@@ -158,7 +209,6 @@ public class Item
 public class equipSlot 
 {
 	public Item EquippedHere;
-	//public string SlotName;
 	public SlotType equipSlotType;
 	
 
