@@ -19,8 +19,8 @@ public class Player : MonoBehaviour {
 	void Start () 
 	{
 		stats = new playerStats(equipment);
-		Loot.Add(new Item("crown", 0, 3, SlotType.head, true));
-		Loot.Add(new Item("megasword", 2, 3, SlotType.sword, false));
+		Loot.Add(new Item("crown", 0, 2, SlotType.head, true));
+		Loot.Add(new Item("lantern", 0, 0, SlotType.dagger, true));
 		Loot.Add(new Item("weaksword", 1, 0, SlotType.sword, false));
 		Loot.Add(new Item("crappyhat", 0, 1, SlotType.head, false));
 	}
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour {
 		}
 		if (Input.GetKeyUp(KeyCode.Space))    
 		{
-			equipItem(findItemWithName("megasword",inventory.InventoryItems));
+			//equipItem(findItemWithName("megasword",inventory.InventoryItems));
 		}
 		if (Input.GetKeyUp(KeyCode.S))
 		{
@@ -127,7 +127,9 @@ public class playerStats
 	public int defense;
 	public int health = 100;
 	public int attackBonus = 0;
+	public int attackBonusReset = 0;
 
+	public bool hasLight = false;
 
 	public playerStats(playerEquipment Equipment)
 	{
@@ -138,6 +140,7 @@ public class playerStats
 	{
 		attack = attackBase + attackBonus;
 		defense = defenseBase;
+		hasLight = false;
 
 		foreach (equipSlot K in equipment.EquipSlots)
 		{
@@ -145,7 +148,10 @@ public class playerStats
 			{
 				attack += K.EquippedHere.Attack;
 				defense += K.EquippedHere.Defense;
+				if (K.EquippedHere.lightSource == true)
+					hasLight = true;
 			}
+
 		}
 	}
 }

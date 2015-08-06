@@ -57,6 +57,7 @@ public class commandExecute : MonoBehaviour {
 
 		if (!battle)
 		{
+			//Debug.Log (story.storyStep + " " + story.stepPart);
 			if (command == "test")
 			{
 				displayedText.text = "Your test succeeded, Well Done";
@@ -82,7 +83,7 @@ public class commandExecute : MonoBehaviour {
 						player.equipItem(player.findItemWithName(command,player.inventory.InventoryItems));
 						displayedText.text += "\n\nequipped " + command + "!";
 						if (command == "crown")
-							displayedText.text += "\n\nYou see your surroundings light up!";
+							displayedText.text += "\n\nYou see your surroundings light up, and feel a radiating wamrth from the crown!";
 					}
 					else 
 					{
@@ -181,10 +182,36 @@ public class commandExecute : MonoBehaviour {
 				else
 					displayedText.text += "\nnot understood, try again";
 			}
-			if (story.storyStep == 3 && story.stepPart == 0)
+			if (story.storyStep == 2 && story.stepPart == 0)
 			{
-				Debug.Log("story Step 3, part 0");
-				battle = true;
+				if (player.stats.hasLight)
+					displayedText.text = story.getNextStoryStep(); // go to light description
+				else 
+					displayedText.text = story.getStorySpecific(4,0); //go to Step after light description 
+			}
+			if (story.storyStep == 4 && story.stepPart == 0)
+			{
+				if (player.stats.hasLight)
+					displayedText.text = story.getNextStoryStep();
+				else 
+					displayedText.text = story.getStorySpecific(6,0);
+			}
+			if (story.storyStep == 5 && story.stepPart == 0)
+			{
+				if (command == "loot")
+				{
+					displayedText.text = story.getNextStepPart();
+					player.stats.attackBonus = 3;
+					player.stats.attackBonusReset = 3;
+				}
+			}
+			if (story.storyStep == 6 && story.stepPart == 0)
+			{
+				if (command == "search")
+				{
+					displayedText.text = story.getNextStepPart();
+					player.addItemtoInventory(player.Loot[1]);
+				}
 			}
 
 		}
@@ -205,7 +232,7 @@ public class BattleHandler
 	{
 		if (command == "attack")
 		{
-			player.stats.attackBonus = 0;
+			player.stats.attackBonus = player.stats.attackBonusReset;
 			enemies[battleIdent].health -= player.stats.attack;
 			player.stats.health -= enemies[battleIdent].attack;
 		}
@@ -277,15 +304,26 @@ public class Story
 		storyText[1,6] = "Instinctively, you jerk your hand back fast, dropping the crown. As the crown hits the ground, it is consumed by the rush of insects flowing away from you. \n>continue";
 
 
-		//Step
-		storyText[2,0] = "This is a test battle\n\n>continue";
+		//Step Bug Panel default
+		storyText[2,0] = "You stumble backwards from the panel, falling down after hitting your head on the opposite wall. \n\n>continue";
 
 
-		//Step BATTLE TEST
-		storyText[3,0] = "battle description \n\n >attack >defend";
+		//Step Bug Panel Light
+		storyText[3,0] = "As the crown illuminates the panel, you see thousands of beady eyed insects retreat into the crevices in the wall, revealing a half decayed skeleton of an adventurer. The remains are sitting directly across from you. The adventurer's eyes are pits, and is wearing a smile too wide to be pleasant. \n\n>continue  ";
 
-		//Step
-		storyText[4,0] = "battle is over!";
+		//Step filler 
+		storyText[4,0] = "The dim light at the end of the hallway grows nearer. \n\n>continue";
+
+		//Step finds body
+		storyText[5,0] = "You find a body lying on the ground off to the side of the hallway. \n\n>loot >continue";
+		storyText[5,1] = "You run your hands along the pockets of the corpe's armor to search for anything useful. You find a small green gem that seems to electrify your arm as you roll it around in your palm. \nThe gem dissolves in your hand and the remaining dust melds into your skin. The emerald hue of the crystal travels up your arm until you feel a burning sensation surge to your heart.\n\n>continue";
+
+		//step crates
+		storyText[6,0] = "You continue down the hallway. The dim light at the end of the hallway grows nearer still. You come across a stack of crates.\n\n>search >continue";
+		storyText[6,1] = "You find a lantern and the means to light it!\n\n>continue";
+
+		//step
+		storyText[7,0] = "7 0";
 
 	}
 
@@ -309,6 +347,8 @@ public class Story
 
 	public string getStorySpecific(int step, int part)
 	{
+		storyStep = step;
+		stepPart = part;
 		return storyText[step,part];
 	}
 
