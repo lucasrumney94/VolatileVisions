@@ -35,6 +35,7 @@ public class commandExecute : MonoBehaviour {
 
 		//Debug.Log(command);
 
+
 		if (battle)
 		{
 			if(!battleHandler.doBattle(player,command))
@@ -213,7 +214,31 @@ public class commandExecute : MonoBehaviour {
 					player.addItemtoInventory(player.Loot[1]);
 				}
 			}
+			if (story.storyStep == 7 && story.stepPart == 0)
+			{
+				
+				displayedText.text += "\nName: " + battleHandler.enemies[0].name;
+				displayedText.text += "\nHealth: " + battleHandler.enemies[0].health;
+				displayedText.text += "\nAttack: " + battleHandler.enemies[0].attack;
+				
+				displayedText.text += "\nDefense: " + battleHandler.enemies[0].defense;
 
+				
+				displayedText.text += "\n>Attack >defend";
+				battle = true;
+			}
+
+		}
+		if (!player.stats.isAlive) //if player is dead then reset the game
+		{
+			battle = false;
+			displayedText.text = "You died!\n" + story.getStorySpecific(0,0);
+			player.inventory.InventoryItems.Clear();
+			foreach(equipSlot x in player.equipment.EquipSlots)
+			{
+				x.EquippedHere = null;
+			}
+			player.stats.reset();
 		}
 	}
 }
@@ -225,7 +250,7 @@ public class BattleHandler
 
 	public BattleHandler()
 	{
-		enemies.Add(new Enemy("goblin",80,2,4));
+		enemies.Add(new Enemy("goblin",80,11,4));
 	}
 
 	public bool doBattle(Player player, string command)
@@ -242,6 +267,10 @@ public class BattleHandler
 				player.stats.attackBonus += (int)Random.Range(1,4);
 			if (enemies[battleIdent].attack-player.stats.defense  > 0)
 				player.stats.health -= (enemies[battleIdent].attack-player.stats.defense);
+		}
+		if (player.stats.health <= 0)
+		{
+			player.stats.isAlive = false;
 		}
 
 		if (enemies[battleIdent].health <= 0)
@@ -322,8 +351,11 @@ public class Story
 		storyText[6,0] = "You continue down the hallway. The dim light at the end of the hallway grows nearer still. You come across a stack of crates.\n\n>search >continue";
 		storyText[6,1] = "You find a lantern and the means to light it!\n\n>continue";
 
-		//step
-		storyText[7,0] = "7 0";
+		//step first battle!
+		storyText[7,0] = "As you continue along the passageway you come upon a goblin blocking your path!\n\n";
+
+		//step battle conclusion
+		storyText [8,0] = "the battle is over! You won and gained armor!\n\n>continue";
 
 	}
 
