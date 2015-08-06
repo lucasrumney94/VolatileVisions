@@ -45,7 +45,7 @@ public class commandExecute : MonoBehaviour {
 			}
 			if (battle)
 			{
-				displayedText.text = "Doing battle!!! \n\n Enemy: " + battleHandler.enemies[battleHandler.battleIdent].name;
+				displayedText.text = "Doing battle!!! \n\nEnemy: " + battleHandler.enemies[battleHandler.battleIdent].name;
 				displayedText.text += "\nEnemy Health:  " + + battleHandler.enemies[battleHandler.battleIdent].health;
 				displayedText.text += "\nEnemy Attack:  " + + battleHandler.enemies[battleHandler.battleIdent].attack;
 				displayedText.text += "\nEnemy Defense: " + + battleHandler.enemies[battleHandler.battleIdent].defense;
@@ -211,7 +211,8 @@ public class BattleHandler
 		}
 		if (command == "defend")
 		{
-			player.stats.attackBonus += (int)Random.Range(1,4);
+			if (player.stats.attackBonus < 10)
+				player.stats.attackBonus += (int)Random.Range(1,4);
 			if (enemies[battleIdent].attack-player.stats.defense  > 0)
 				player.stats.health -= (enemies[battleIdent].attack-player.stats.defense);
 		}
