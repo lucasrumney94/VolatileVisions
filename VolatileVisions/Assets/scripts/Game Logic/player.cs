@@ -19,9 +19,10 @@ public class Player : MonoBehaviour {
 	void Start () 
 	{
 		stats = new playerStats(equipment);
-		Loot.Add(new Item("megasword", 2, 3, SlotType.sword));
-		Loot.Add(new Item("weaksword", 1, 0, SlotType.sword));
-		Loot.Add(new Item("crappyhat", 0, 1, SlotType.head));
+		Loot.Add(new Item("crown", 0, 5, SlotType.head, true));
+		Loot.Add(new Item("megasword", 2, 3, SlotType.sword, false));
+		Loot.Add(new Item("weaksword", 1, 0, SlotType.sword, false));
+		Loot.Add(new Item("crappyhat", 0, 1, SlotType.head, false));
 	}
 	
 
@@ -62,11 +63,11 @@ public class Player : MonoBehaviour {
 
 	}
 
-	void addItemtoInventory(Item item)
+	public void addItemtoInventory(Item item)
 	{
 		inventory.InventoryItems.Add(item);
 	}
-	void removeItemfromInventory(Item item)
+	public void removeItemfromInventory(Item item)
 	{
 		inventory.InventoryItems.Remove(item);
 	}
@@ -124,7 +125,7 @@ public class playerStats
 	private int defenseBase = 10;
 	public int attack;
 	public int defense;
-
+	public int health = 100;
 
 
 	public playerStats(playerEquipment Equipment)
@@ -194,13 +195,15 @@ public class Item
 	public int Attack;
 	public int Defense;
 	public SlotType itemSlotType;
+	public bool lightSource;
 
-	public Item(string name, int attack, int defense, SlotType slotType)
+	public Item(string name, int attack, int defense, SlotType slotType, bool lightsource)
 	{
 		this.Name = name; 
 		this.Attack = attack;
 		this.Defense = defense;
 		this.itemSlotType = slotType;
+		this.lightSource = lightsource;
 	}
 }
 
