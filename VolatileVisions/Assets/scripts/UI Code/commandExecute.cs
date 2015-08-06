@@ -133,7 +133,7 @@ public class commandExecute : MonoBehaviour {
 			}
 			//Begin Story Commands
 			//continue if allowed by story and battles
-			else if (command == "continue" && !(story.storyStep == 1 && story.stepPart == 4))
+			else if (command == "continue" && !(story.storyStep == 1 && story.stepPart == 4) && !(story.storyStep == 9 && (story.stepPart == 1 || story.stepPart == 2)) && !(story.storyStep == 10))
 			{
 				displayedText.text = story.getNextStoryStep();
 			}
@@ -227,6 +227,57 @@ public class commandExecute : MonoBehaviour {
 				displayedText.text += "\n>Attack >defend";
 				battle = true;
 			}
+			if (story.storyStep == 8 && story.stepPart == 0)
+			{
+				player.addItemtoInventory(player.Loot[2]); //gained shortsword!
+			}
+
+			if (story.storyStep == 9 && story.stepPart == 0)
+			{
+				if (!player.stats.hasLight)
+				{
+					displayedText.text = story.getStorySpecific(10,0);
+				}
+
+//				if (command == "continue")
+//				{
+//					displayedText.text = story.getStorySpecific(10,0);
+//				}
+				if (command == "disarm" && player.stats.hasLight)
+				{
+					displayedText.text = story.getNextStepPart();
+				}
+			}
+			if (story.storyStep == 9 && story.stepPart == 1)
+			{
+				if (command == "continue")
+					displayedText.text = story.getStorySpecific(11,0);
+				if (command == "loot")
+				{
+					player.addItemtoInventory(player.Loot[3]); //got armor!
+					displayedText.text = story.getNextStepPart();
+				}
+			}
+			if (story.storyStep == 9 && story.stepPart == 2)
+			{
+				if (command == "continue")
+					displayedText.text = story.getStorySpecific(11,0);
+			}
+
+			if (story.storyStep == 10 && story.stepPart == 0)
+			{
+
+				story.getNextStepPart();
+
+			
+			}
+			if (story.storyStep == 10 && story.stepPart == 1)
+			{
+				if (command == "restart")
+				{
+					player.stats.isAlive = false;
+				}
+			}
 
 		}
 		if (!player.stats.isAlive) //if player is dead then reset the game
@@ -234,6 +285,11 @@ public class commandExecute : MonoBehaviour {
 			battle = false;
 			displayedText.text = "You died!\n" + story.getStorySpecific(0,0);
 			player.inventory.InventoryItems.Clear();
+			battleHandler.battleIdent = 0;
+			foreach (Enemy E in battleHandler.enemies)
+			{
+				E.health = E.initialHealth;
+			}
 			foreach(equipSlot x in player.equipment.EquipSlots)
 			{
 				x.EquippedHere = null;
@@ -250,7 +306,7 @@ public class BattleHandler
 
 	public BattleHandler()
 	{
-		enemies.Add(new Enemy("goblin",80,11,4));
+		enemies.Add(new Enemy("goblin",10,11,4)); //health should be 50
 	}
 
 	public bool doBattle(Player player, string command)
@@ -298,12 +354,14 @@ public class Enemy
 	public int health;
 	public int attack;
 	public int defense;
+	public int initialHealth;
 
 
 	public Enemy(string Name, int Health, int Attack, int Defense)
 	{
 		this.name = Name;
 		this.health = Health;
+		this.initialHealth = Health;
 		this.attack = Attack;
 		this.defense = Defense;
 	}
@@ -313,7 +371,7 @@ public class Story
 {
 	public int storyStep;
 	public int stepPart;
-	public string[,] storyText = new string[10,10];
+	public string[,] storyText = new string[30,30];
 
 	public Story(int step, int steppart)
 	{
@@ -355,7 +413,19 @@ public class Story
 		storyText[7,0] = "As you continue along the passageway you come upon a goblin blocking your path!\n\n";
 
 		//step battle conclusion
-		storyText [8,0] = "the battle is over! You won and gained armor!\n\n>continue";
+		storyText[8,0] = "the battle is over! You won and gained shortsword!\n\n>continue";
+
+		//step trap if light
+		storyText[9,0] = "You spot a trap! The trap has already killed a previous adventurer, and if disarmed, you may be able to loot their armor.\n\n>disarm >continue";
+		storyText[9,1] = "You disarmed the trap! \n\n>loot >continue";
+		storyText[9,2] = "You looted the body and got armor! \n\n>continue";
+
+		//step trap if no light
+		storyText[10,0] = "You Died in a trap you twat.\n\n>restart";
+		storyText[10,1] = "BLERGH";
+
+		//step got past trap
+		storyText[11,0] = "Continued past the trap\n\n>continue";
 
 	}
 
