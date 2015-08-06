@@ -19,7 +19,7 @@ public class Player : MonoBehaviour {
 	void Start () 
 	{
 		stats = new playerStats(equipment);
-		Loot.Add(new Item("crown", 0, 5, SlotType.head, true));
+		Loot.Add(new Item("crown", 0, 3, SlotType.head, true));
 		Loot.Add(new Item("megasword", 2, 3, SlotType.sword, false));
 		Loot.Add(new Item("weaksword", 1, 0, SlotType.sword, false));
 		Loot.Add(new Item("crappyhat", 0, 1, SlotType.head, false));

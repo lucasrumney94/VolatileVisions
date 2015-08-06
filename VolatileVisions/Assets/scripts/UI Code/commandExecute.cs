@@ -55,6 +55,8 @@ public class commandExecute : MonoBehaviour {
 				{
 					player.equipItem(player.findItemWithName(command,player.inventory.InventoryItems));
 					displayedText.text += "\n\nequipped " + command + "!";
+					if (command == "crown")
+						displayedText.text += "\n\nYou see your surroundings light up!";
 				}
 				else 
 				{
@@ -107,7 +109,7 @@ public class commandExecute : MonoBehaviour {
 		{
 			displayedText.text = story.getNextStoryStep();
 		}
-		else if (command == "story")
+		else if (command == "story" || command == "look")
 		{
 			displayedText.text = story.getStoryText();
 		}
@@ -117,6 +119,8 @@ public class commandExecute : MonoBehaviour {
 			{
 				displayedText.text = story.getNextStepPart();
 			}
+			else
+				displayedText.text += "\nnot understood, try again";
 		}
 		else if (story.storyStep == 1 && (story.stepPart == 1 || story.stepPart == 2))
 		{
@@ -124,6 +128,8 @@ public class commandExecute : MonoBehaviour {
 			{
 				displayedText.text = story.getNextStepPart();
 			}
+			else
+				displayedText.text += "\nnot understood, try again";
 		}
 		else if (story.storyStep == 1 && story.stepPart == 3)
 		{
@@ -131,6 +137,8 @@ public class commandExecute : MonoBehaviour {
 			{
 				displayedText.text = story.getNextStepPart();
 			}
+			else
+				displayedText.text += "\nnot understood, try again";
 		}
 		else if (story.storyStep == 1 && story.stepPart == 4)
 		{
@@ -138,15 +146,18 @@ public class commandExecute : MonoBehaviour {
 			{
 				displayedText.text = story.getNextStepPart();
 				player.addItemtoInventory(player.Loot[0]);
+				player.stats.health -= 5;
 			}
-			if (command == "leave")
+			else if (command == "leave")
 			{
 				displayedText.text = story.getStorySpecific(1,6);
 			}
+			else
+				displayedText.text += "\nnot understood, try again";
 		}
 		else 
 		{
-			displayedText.text = "not understood, try again";
+			displayedText.text += "not understood, try again";
 		}
 	}
 }
@@ -172,12 +183,12 @@ public class Story
 		storyText[1,3] = "You slowly slide your fingers into the crack... \nYou find a switch!\n*CLICK*\n--WHOOSH--\nA panel slides open, revealing a cavity in the wall. The noise of the insects grows considerably.\n You cannot see well, but sense that the cavity is rather small. A small glint of gold near the floor catches your eye.\n\n >take >continue";
 		storyText[1,4] = "You bend down to grasp the golden object, holding the panel frame with your other hand to steady yourself. You reach down and wrap your fingers slowly around a crown.\nBefore you can pick it up, you feel hundreds of tiny legs begin to cling to you and swarm up your arm. \n\n!!!>take !!!>leave";
 
-		storyText[1,5] = "Instinctively you jerk your hand back fast, still gripping the crown. You frantically shake off the insects that are still clinging to your arm. \nYou feel a sharp pain in your right arm as the last insect tries to latch on to you with its fangs. You snatch it off of your arm, and throw it away.";
-		storyText[1,6] = "left the crown behind";
+		storyText[1,5] = "Instinctively you jerk your hand back fast, still gripping the crown. You frantically shake off the insects that are still clinging to your arm. \nYou feel a sharp pain in your right arm as the last insect tries to latch on to you with its fangs. You snatch it off of your arm, and throw it away. \n>continue";
+		storyText[1,6] = "Instinctively, you jerk your hand back fast, dropping the crown. As the crown hits the ground, it is consumed by the rush of insects flowing away from you. \n>continue";
 
 
 		//Step
-			storyText[2,0] = "2,0";
+		storyText[2,0] = "";
 
 		//Step
 
