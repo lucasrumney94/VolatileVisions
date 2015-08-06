@@ -126,6 +126,7 @@ public class playerStats
 	public int attack;
 	public int defense;
 	public int health = 100;
+	public int attackBonus = 0;
 
 
 	public playerStats(playerEquipment Equipment)
@@ -135,7 +136,7 @@ public class playerStats
 
 	public void calculateStats()
 	{
-		attack = attackBase;
+		attack = attackBase + attackBonus;
 		defense = defenseBase;
 
 		foreach (equipSlot K in equipment.EquipSlots)

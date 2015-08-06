@@ -16,7 +16,7 @@ public class displayStats : MonoBehaviour
 	void Update()
 	{
 		player.stats.calculateStats();
-		statText.text = "Stats\n\n" + "Health:  " + player.stats.health + "\nAttack:  " + player.stats.attack + "\ndefense: " + player.stats.defense;
+		statText.text = "Stats\n\n" + "Health:  " + player.stats.health + "\nAttack:  " + player.stats.attack + "\ndefense: " + player.stats.defense + "\nAttack Bonus: " + player.stats.attackBonus;
 	}
 
 }

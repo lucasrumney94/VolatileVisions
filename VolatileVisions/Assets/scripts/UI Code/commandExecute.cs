@@ -1,18 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class commandExecute : MonoBehaviour {
 
 	public Player player;
 	public Story story;
+	public BattleHandler battleHandler;
 	public bool equipMenu;
+	public bool battle;
+
 	public Text displayedText;
 	// Use this for initialization
 	void Start () 
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 		story = new Story(0,0);
+		battleHandler = new BattleHandler();
 		equipMenu = false;
 		displayedText = GetComponent<Text>();
 		displayedText.text = story.getStoryText();
@@ -30,138 +35,222 @@ public class commandExecute : MonoBehaviour {
 
 		//Debug.Log(command);
 
-
-		if (command == "test")
+		if (battle)
 		{
-			displayedText.text = "Your test succeeded, Well Done";
-		}
-		else if (command == "equip")
-		{
-			displayedText.text = "equip what? \n";
-			foreach (Item I in player.inventory.InventoryItems)
+			if(!battleHandler.doBattle(player,command))
 			{
-				if (I != null)
-					displayedText.text += I.Name + "\n";
+				battle = false;
+				battleHandler.advanceBattleIdent();
+				displayedText.text = story.getNextStoryStep();
 			}
-			equipMenu = true;
-		}
-		else if (equipMenu)
-		{
-			equipMenu = false;
-			if (player.inventory.InventoryItems != null)
+			if (battle)
 			{
+				displayedText.text = "Doing battle!!! \n\n Enemy: " + battleHandler.enemies[battleHandler.battleIdent].name;
+				displayedText.text += "\nEnemy Health:  " + + battleHandler.enemies[battleHandler.battleIdent].health;
+				displayedText.text += "\nEnemy Attack:  " + + battleHandler.enemies[battleHandler.battleIdent].attack;
+				displayedText.text += "\nEnemy Defense: " + + battleHandler.enemies[battleHandler.battleIdent].defense;
+				displayedText.text += "\n\n>attack >defend";
+			}
+		}
 
-				if (player.findItemWithName(command,player.inventory.InventoryItems) != null)
+
+
+		if (!battle)
+		{
+			if (command == "test")
+			{
+				displayedText.text = "Your test succeeded, Well Done";
+			}
+			else if (command == "equip")
+			{
+				displayedText.text = "equip what? \n";
+				foreach (Item I in player.inventory.InventoryItems)
 				{
-					player.equipItem(player.findItemWithName(command,player.inventory.InventoryItems));
-					displayedText.text += "\n\nequipped " + command + "!";
-					if (command == "crown")
-						displayedText.text += "\n\nYou see your surroundings light up!";
+					if (I != null)
+						displayedText.text += I.Name + "\n";
+				}
+				equipMenu = true;
+			}
+			else if (equipMenu)
+			{
+				equipMenu = false;
+				if (player.inventory.InventoryItems != null)
+				{
+
+					if (player.findItemWithName(command,player.inventory.InventoryItems) != null)
+					{
+						player.equipItem(player.findItemWithName(command,player.inventory.InventoryItems));
+						displayedText.text += "\n\nequipped " + command + "!";
+						if (command == "crown")
+							displayedText.text += "\n\nYou see your surroundings light up!";
+					}
+					else 
+					{
+						displayedText.text += "\nitem not recognized!";
+					}
+				}
+				else
+				{
+					displayedText.text += "\ninventory empty!";
+				}
+
+			}
+			else if (command == "inventory")
+			{
+				displayedText.text = "Inventory: \n";
+				foreach (Item I in player.inventory.InventoryItems)
+				{
+					if (I != null)
+						displayedText.text += I.Name + "\n";
+				}
+				if (player.inventory.InventoryItems.Count == 0)
+					displayedText.text += "empty!";
+			}
+			else if (command == "equipment" || command == "equipped")
+			{
+				displayedText.text = "Equpped Items: \n";
+				if (player.equipment.EquipSlots.Count != 0)
+				{
+					foreach (equipSlot E in player.equipment.EquipSlots)
+					{
+						if (E.EquippedHere != null)
+							displayedText.text += E.EquippedHere.Name + "\n";
+					}
 				}
 				else 
 				{
-					displayedText.text += "\nitem not recognized!";
+					displayedText.text += "nothing equipped!";
 				}
 			}
-			else
+			else if (command == "stats")
 			{
-				displayedText.text += "\ninventory empty!";
+				displayedText.text = "player stats:\n";
+				displayedText.text += "health  : " + player.stats.health;
+				displayedText.text += "\nattack  : " + player.stats.attack;
+				displayedText.text += "\ndefense : " + player.stats.defense;
+			}
+			//Begin Story Commands
+			//continue if allowed by story and battles
+			else if (command == "continue" && !(story.storyStep == 1 && story.stepPart == 4))
+			{
+				displayedText.text = story.getNextStoryStep();
+			}
+			else if (command == "story" || command == "look")
+			{
+				displayedText.text = story.getStoryText();
+			}
+			else if (story.storyStep == 1 && story.stepPart == 0)
+			{
+				if (command == "investigate")
+				{
+					displayedText.text = story.getNextStepPart();
+				}
+				else
+					displayedText.text += "\nnot understood, try again";
+			}
+			else if (story.storyStep == 1 && (story.stepPart == 1 || story.stepPart == 2))
+			{
+				if (command == "check")
+				{
+					displayedText.text = story.getNextStepPart();
+				}
+				else
+					displayedText.text += "\nnot understood, try again";
+			}
+			else if (story.storyStep == 1 && story.stepPart == 3)
+			{
+				if (command == "take")
+				{
+					displayedText.text = story.getNextStepPart();
+				}
+				else
+					displayedText.text += "\nnot understood, try again";
+			}
+			else if (story.storyStep == 1 && story.stepPart == 4)
+			{
+				if (command == "take")
+				{
+					displayedText.text = story.getNextStepPart();
+					player.addItemtoInventory(player.Loot[0]);
+					player.stats.health -= 5;
+				}
+				else if (command == "leave")
+				{
+					displayedText.text = story.getStorySpecific(1,6);
+				}
+				else
+					displayedText.text += "\nnot understood, try again";
+			}
+			if (story.storyStep == 3 && story.stepPart == 0)
+			{
+				Debug.Log("story Step 3, part 0");
+				battle = true;
 			}
 
-		}
-		else if (command == "inventory")
-		{
-			displayedText.text = "Inventory: \n";
-			foreach (Item I in player.inventory.InventoryItems)
-			{
-				if (I != null)
-					displayedText.text += I.Name + "\n";
-			}
-			if (player.inventory.InventoryItems.Count == 0)
-				displayedText.text += "empty!";
-		}
-		else if (command == "equipment" || command == "equipped")
-		{
-			displayedText.text = "Equpped Items: \n";
-			if (player.equipment.EquipSlots.Count != 0)
-			{
-				foreach (equipSlot E in player.equipment.EquipSlots)
-				{
-					if (E.EquippedHere != null)
-						displayedText.text += E.EquippedHere.Name + "\n";
-				}
-			}
-			else 
-			{
-				displayedText.text += "nothing equipped!";
-			}
-		}
-		else if (command == "stats")
-		{
-			displayedText.text = "player stats:\n";
-			displayedText.text += "health  : " + player.stats.health;
-			displayedText.text += "\nattack  : " + player.stats.attack;
-			displayedText.text += "\ndefense : " + player.stats.defense;
-		}
-		//Begin Story Commands
-		//continue if allowed by story and battles
-		else if (command == "continue" && !(story.storyStep == 1 && story.stepPart == 4))
-		{
-			displayedText.text = story.getNextStoryStep();
-		}
-		else if (command == "story" || command == "look")
-		{
-			displayedText.text = story.getStoryText();
-		}
-		else if (story.storyStep == 1 && story.stepPart == 0)
-		{
-			if (command == "investigate")
-			{
-				displayedText.text = story.getNextStepPart();
-			}
-			else
-				displayedText.text += "\nnot understood, try again";
-		}
-		else if (story.storyStep == 1 && (story.stepPart == 1 || story.stepPart == 2))
-		{
-			if (command == "check")
-			{
-				displayedText.text = story.getNextStepPart();
-			}
-			else
-				displayedText.text += "\nnot understood, try again";
-		}
-		else if (story.storyStep == 1 && story.stepPart == 3)
-		{
-			if (command == "take")
-			{
-				displayedText.text = story.getNextStepPart();
-			}
-			else
-				displayedText.text += "\nnot understood, try again";
-		}
-		else if (story.storyStep == 1 && story.stepPart == 4)
-		{
-			if (command == "take")
-			{
-				displayedText.text = story.getNextStepPart();
-				player.addItemtoInventory(player.Loot[0]);
-				player.stats.health -= 5;
-			}
-			else if (command == "leave")
-			{
-				displayedText.text = story.getStorySpecific(1,6);
-			}
-			else
-				displayedText.text += "\nnot understood, try again";
-		}
-		else 
-		{
-			displayedText.text += "not understood, try again";
 		}
 	}
 }
 
+public class BattleHandler
+{
+	public List<Enemy> enemies = new List<Enemy>();
+	public int battleIdent = 0;
+
+	public BattleHandler()
+	{
+		enemies.Add(new Enemy("goblin",80,2,4));
+	}
+
+	public bool doBattle(Player player, string command)
+	{
+		if (command == "attack")
+		{
+			player.stats.attackBonus = 0;
+			enemies[battleIdent].health -= player.stats.attack;
+			player.stats.health -= enemies[battleIdent].attack;
+		}
+		if (command == "defend")
+		{
+			player.stats.attackBonus += (int)Random.Range(1,4);
+			if (enemies[battleIdent].attack-player.stats.defense  > 0)
+				player.stats.health -= (enemies[battleIdent].attack-player.stats.defense);
+		}
+
+		if (enemies[battleIdent].health <= 0)
+		{
+			return false;
+		}
+		else 
+		{
+			return true;
+		}
+
+
+	}
+
+	public void advanceBattleIdent()
+	{
+		battleIdent+=1;
+	}
+	
+}
+
+public class Enemy
+{
+	public string name;
+	public int health;
+	public int attack;
+	public int defense;
+
+
+	public Enemy(string Name, int Health, int Attack, int Defense)
+	{
+		this.name = Name;
+		this.health = Health;
+		this.attack = Attack;
+		this.defense = Defense;
+	}
+}
 
 public class Story
 {
@@ -188,12 +277,14 @@ public class Story
 
 
 		//Step
-		storyText[2,0] = "";
+		storyText[2,0] = "This is a test battle\n\n>continue";
+
+
+		//Step BATTLE TEST
+		storyText[3,0] = "battle description \n\n >attack >defend";
 
 		//Step
-
-
-		//Step
+		storyText[4,0] = "battle is over!";
 
 	}
 

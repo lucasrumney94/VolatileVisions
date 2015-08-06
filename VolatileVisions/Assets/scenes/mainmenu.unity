@@ -479,10 +479,10 @@ RectTransform:
   - {fileID: 417541532}
   m_Father: {fileID: 1473460949}
   m_RootOrder: 2
-  m_AnchorMin: {x: .750215411, y: .0340000018}
-  m_AnchorMax: {x: .97316736, y: .48300001}
+  m_AnchorMin: {x: .721564293, y: .0340000018}
+  m_AnchorMax: {x: .97316736, y: .463000029}
   m_AnchoredPosition: {x: 4.38700008, y: 3.10400009}
-  m_SizeDelta: {x: 6.6000061, y: -2.9000001}
+  m_SizeDelta: {x: 10, y: 6}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &377496541
 MonoBehaviour:
@@ -1434,6 +1434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   equipMenu: 0
+  battle: 0
   displayedText: {fileID: 0}
 --- !u!1 &1645733884
 GameObject:
