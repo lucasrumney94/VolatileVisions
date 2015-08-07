@@ -12,11 +12,11 @@ The parser will not recognize compound commands or
 verb-object commands such as "equip weapon"
 
 At (almost) all times you have access to the following commands:
-inventory 				: lists current inventory
-equipment || equipped 	: lists current equipped items
-equip					: enters equip menu (enter item name after executing equip command)	 
-continue				: ignores current interaction and continues along path
-story || look			: Displays current story text
+*inventory 				: lists current inventory
+*equipment || equipped 	: lists current equipped items
+*equip					: enters equip menu (enter item name after executing equip command)	 
+*continue				: ignores current interaction and continues along path
+*story || look			: Displays current story text
 
 
 Other contextual commands will be displayed on screen with the story text. 
@@ -32,7 +32,7 @@ Defending will block damage and grant an attack Bonus to your next few attacks.
 Hint: Having an object that emits light equipped will affect available contextual commands or story events.
 
 
-##Project File~~~~~~~~~
+##Project File
 Download the source files, extract, and open scenes->"mainmenu.scene". 
 Feel free to use any part of the code (just give credit where credit is due), 
 or email Lucas for questions or suggestions.
@@ -41,6 +41,7 @@ or email Lucas for questions or suggestions.
 
 ##Author
 Graphical Assets:   Lucas Rumney
+
 Code:               Lucas Rumney
 
 ##Contact Us
