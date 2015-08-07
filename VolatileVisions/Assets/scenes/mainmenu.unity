@@ -266,7 +266,7 @@ GameObject:
   - 223: {fileID: 218643503}
   - 114: {fileID: 218643502}
   - 114: {fileID: 218643501}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Play Screen
   m_TagString: play
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ Canvas:
   serializedVersion: 2
   m_RenderMode: 1
   m_Camera: {fileID: 633520631}
-  m_PlaneDistance: 1000
+  m_PlaneDistance: 100
   m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -358,7 +358,7 @@ GameObject:
   - 114: {fileID: 338406285}
   - 114: {fileID: 338406284}
   - 225: {fileID: 338406283}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Screen Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,7 +443,7 @@ RectTransform:
   - {fileID: 1761896755}
   - {fileID: 412767961}
   m_Father: {fileID: 2088403223}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -459,7 +459,7 @@ GameObject:
   - 224: {fileID: 377496540}
   - 222: {fileID: 377496542}
   - 114: {fileID: 377496541}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: StatsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +583,7 @@ GameObject:
   - 222: {fileID: 417541534}
   - 114: {fileID: 417541533}
   - 114: {fileID: 417541535}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: StatText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -726,7 +726,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 565632496}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1597017155}
+        m_MethodName: exitGameNow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!222 &565632495
@@ -912,7 +923,7 @@ GameObject:
   - 224: {fileID: 862867994}
   - 222: {fileID: 862867996}
   - 114: {fileID: 862867995}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Placeholder
   m_TagString: commandPlaceholder
   m_Icon: {fileID: 0}
@@ -979,7 +990,7 @@ GameObject:
   - 222: {fileID: 1048125347}
   - 114: {fileID: 1048125346}
   - 114: {fileID: 1048125345}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: commandEchoMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1053,7 +1064,7 @@ GameObject:
   - 224: {fileID: 1290990339}
   - 222: {fileID: 1290990341}
   - 114: {fileID: 1290990340}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1067,14 +1078,14 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1290990338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1630881010}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -50.0000076}
+  m_AnchoredPosition: {x: 0, y: -135}
   m_SizeDelta: {x: 579, y: 60}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1290990340
@@ -1121,7 +1132,8 @@ GameObject:
   - 114: {fileID: 1346732879}
   - 114: {fileID: 1346732878}
   - 225: {fileID: 1346732877}
-  m_Layer: 5
+  - 114: {fileID: 1346732882}
+  m_Layer: 0
   m_Name: Main menu
   m_TagString: main
   m_Icon: {fileID: 0}
@@ -1186,7 +1198,7 @@ Canvas:
   serializedVersion: 2
   m_RenderMode: 1
   m_Camera: {fileID: 633520631}
-  m_PlaneDistance: 1000
+  m_PlaneDistance: 100
   m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1211,6 +1223,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1346732882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1346732876}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0c898f0059603478b5345eb6b38018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1473460948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,7 +1244,7 @@ GameObject:
   - 224: {fileID: 1473460949}
   - 222: {fileID: 1473460951}
   - 114: {fileID: 1473460950}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: IO Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1284,6 +1307,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 1597017154}
   - 114: {fileID: 1597017153}
+  - 114: {fileID: 1597017155}
   m_Layer: 0
   m_Name: UI Handler
   m_TagString: Untagged
@@ -1313,12 +1337,23 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2088403223}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: .5, y: .5}
+--- !u!114 &1597017155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1597017152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d8b95191ab8ef40896e27ab43cf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1630881009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1327,7 +1362,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 1630881010}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1365,7 +1400,7 @@ GameObject:
   - 222: {fileID: 1640981478}
   - 114: {fileID: 1640981477}
   - 114: {fileID: 1640981479}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: OutputText
   m_TagString: output
   m_Icon: {fileID: 0}
@@ -1491,7 +1526,7 @@ GameObject:
   - 222: {fileID: 1746859124}
   - 114: {fileID: 1746859123}
   - 114: {fileID: 1746859125}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: commandEcho
   m_TagString: cmdEcho
   m_Icon: {fileID: 0}
@@ -1631,7 +1666,7 @@ GameObject:
   - 114: {fileID: 1879583341}
   - 114: {fileID: 1879583340}
   - 114: {fileID: 1879583343}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: commandLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1908,7 +1943,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2088403223}
+  m_Father: {fileID: 0}
   m_RootOrder: 3
 --- !u!1 &1907717736
 GameObject:
@@ -1920,7 +1955,7 @@ GameObject:
   - 224: {fileID: 1907717739}
   - 222: {fileID: 1907717738}
   - 114: {fileID: 1907717737}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: commandText
   m_TagString: commandText
   m_Icon: {fileID: 0}
@@ -2003,7 +2038,7 @@ Transform:
   m_Children:
   - {fileID: 1645733885}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &1923127182
 GameObject:
   m_ObjectHideFlags: 0
@@ -2014,7 +2049,7 @@ GameObject:
   - 224: {fileID: 1923127183}
   - 222: {fileID: 1923127185}
   - 114: {fileID: 1923127184}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Output Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2286,7 +2321,6 @@ RectTransform:
   - {fileID: 141716975}
   - {fileID: 1346732881}
   - {fileID: 218643500}
-  - {fileID: 1898362732}
   - {fileID: 1597017154}
   - {fileID: 338406287}
   m_Father: {fileID: 0}
