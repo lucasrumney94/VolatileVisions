@@ -427,6 +427,9 @@ public class Story
 		//step got past trap
 		storyText[11,0] = "Continued past the trap\n\n>continue";
 
+
+		storyText[12,0] = "You enter a huge cavern and before you is the King of the Hall!";
+
 	}
 
 	public string getStoryText()
