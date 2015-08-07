@@ -97,7 +97,7 @@ public class commandExecute : MonoBehaviour {
 				}
 
 			}
-			else if (command == "inventory")
+			else if (command == "inventory" && (story.storyStep != 8))
 			{
 				displayedText.text = "Inventory: \n";
 				foreach (Item I in player.inventory.InventoryItems)
@@ -229,7 +229,8 @@ public class commandExecute : MonoBehaviour {
 			}
 			if (story.storyStep == 8 && story.stepPart == 0)
 			{
-				player.addItemtoInventory(player.Loot[2]); //gained shortsword!
+				if (command == "continue")
+					player.addItemtoInventory(player.Loot[2]); //gained shortsword!
 			}
 
 			if (story.storyStep == 9 && story.stepPart == 0)
