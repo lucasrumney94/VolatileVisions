@@ -41,6 +41,10 @@ public class commandExecute : MonoBehaviour {
 			if(!battleHandler.doBattle(player,command))
 			{
 				battle = false;
+				if (battleHandler.battleIdent == 0)
+				{
+					player.addItemtoInventory(player.Loot[2]);
+				}
 				battleHandler.advanceBattleIdent();
 				displayedText.text = story.getNextStoryStep();
 			}
@@ -97,7 +101,7 @@ public class commandExecute : MonoBehaviour {
 				}
 
 			}
-			else if (command == "inventory" && (story.storyStep != 8))
+			else if (command == "inventory")
 			{
 				displayedText.text = "Inventory: \n";
 				foreach (Item I in player.inventory.InventoryItems)
@@ -133,7 +137,7 @@ public class commandExecute : MonoBehaviour {
 			}
 			//Begin Story Commands
 			//continue if allowed by story and battles
-			else if (command == "continue" && !(story.storyStep == 1 && story.stepPart == 4) && !(story.storyStep == 9 && (story.stepPart == 1 || story.stepPart == 2)) && !(story.storyStep == 10))
+			else if (command == "continue" && !(story.storyStep == 1 && story.stepPart == 4) && !(story.storyStep == 9 && (story.stepPart == 1 || story.stepPart == 2)) && !(story.storyStep == 10) && (story.storyStep != 8))
 			{
 				displayedText.text = story.getNextStoryStep();
 			}
@@ -230,7 +234,10 @@ public class commandExecute : MonoBehaviour {
 			if (story.storyStep == 8 && story.stepPart == 0)
 			{
 				if (command == "continue")
-					player.addItemtoInventory(player.Loot[2]); //gained shortsword!
+				{
+					displayedText.text = story.getNextStoryStep();
+					 //gained shortsword!
+				}
 			}
 
 			if (story.storyStep == 9 && story.stepPart == 0)
@@ -422,7 +429,7 @@ public class Story
 		storyText[9,2] = "You looted the body and got armor! \n\n>continue";
 
 		//step trap if no light
-		storyText[10,0] = "You Died in a trap you twat.\n\n>restart";
+		storyText[10,0] = "You Died in a trap.\n\n>restart";
 		storyText[10,1] = "BLERGH";
 
 		//step got past trap
