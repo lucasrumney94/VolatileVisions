@@ -466,11 +466,11 @@ public class Story
 		//actual battle time
 		storyText[13,0] = "He laughs, and bellows \"Fool, you cannot defeat me!\"";
 
-		storyText[14,0] = "\"Ahhhhh you have defeated me! I will one day have my revenge!\"\nSuddenly a portal illuminates the entirety of the cavern, and the King of the Hall flies backwards into it. The roof caves in near the back of the cavern, revealing a stairwell lit by a shaft of sunlight.\n\n>continue";
+		storyText[14,0] = "\"Ahhhhh you have defeated me! I will one day have my revenge!\"\nSuddenly a portal illuminates the entirety of the cavern, and the King of the Hall flies backwards into it. The ceiling caves in near the back of the cavern, revealing a stairwell lit by a shaft of sunlight.\n\n>continue";
 
 		storyText[15,0] = "You have defeated the King of the Hall and escaped the hallway! Thanks for playing!\n\n>credits";
 
-		credits = "These are the credits";
+		credits 		= "Graphical Assets: Lucas Rumney \n\nCode: Lucas Rumney\n\nEmotional Support: Hardy Whitney\n\nSource for this project can be found at: https://github.com/lucasrumney94/VolatileVisions\n\nContact us at: jetdriftstudio@gmail.com";
 
 	}
 

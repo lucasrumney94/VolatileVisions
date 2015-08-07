@@ -29,40 +29,42 @@ public class Player : MonoBehaviour {
 
 	void Update () 
 	{
-		foreach (equipSlot F in equipment.EquipSlots)
+//		foreach (equipSlot F in equipment.EquipSlots)
+//		{
+//			if (F.EquippedHere != null)
+//				Debug.Log(F.EquippedHere.Name);
+//		}
+//
+//		if (Input.GetKeyUp(KeyCode.Z))
+//		{
+//			addItemtoInventory(Loot[0]);
+//			addItemtoInventory(Loot[1]);//needs to be setup for plaintext
+//			addItemtoInventory(Loot[2]);
+//
+//		}
+//		if (Input.GetKeyUp(KeyCode.Space))    
+//		{
+//			stats.health = 5;
+//			//equipItem(findItemWithName("megasword",inventory.InventoryItems));
+//		}
+//		if (Input.GetKeyUp(KeyCode.S))
+//		{
+//			stats.calculateStats();
+//			Debug.Log("attack is " + stats.attack);
+//			Debug.Log("defense is " + stats.defense);
+//		}
+//		if (Input.GetKeyUp (KeyCode.I))
+//		{
+//			foreach (Item L in inventory.InventoryItems)
+//			{	
+//				if (L != null)
+//					Debug.Log(L.Name);
+//			}
+//		}
+		if (Input.GetKeyUp (KeyCode.Escape))
 		{
-			if (F.EquippedHere != null)
-				Debug.Log(F.EquippedHere.Name);
+			Application.Quit();
 		}
-
-		if (Input.GetKeyUp(KeyCode.Z))
-		{
-			addItemtoInventory(Loot[0]);
-			addItemtoInventory(Loot[1]);//needs to be setup for plaintext
-			addItemtoInventory(Loot[2]);
-
-		}
-		if (Input.GetKeyUp(KeyCode.Space))    
-		{
-			stats.health = 5;
-			//equipItem(findItemWithName("megasword",inventory.InventoryItems));
-		}
-		if (Input.GetKeyUp(KeyCode.S))
-		{
-			stats.calculateStats();
-			Debug.Log("attack is " + stats.attack);
-			Debug.Log("defense is " + stats.defense);
-		}
-		if (Input.GetKeyUp (KeyCode.I))
-		{
-			foreach (Item L in inventory.InventoryItems)
-			{	
-				if (L != null)
-					Debug.Log(L.Name);
-			}
-		}
-
-
 	}
 
 	public void addItemtoInventory(Item item)

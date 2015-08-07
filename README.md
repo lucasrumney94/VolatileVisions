@@ -10,6 +10,8 @@ The Main Menu is mouse based.
 
 The remainder of the game is controlled via text entry. 
 
+You may exit the game at any time by pressing Escape.
+
 The parser will not recognize compound commands or verb-object commands such as "equip weapon"
 
 At (almost) all times you have access to the following commands:
