@@ -45,6 +45,7 @@ public class commandExecute : MonoBehaviour {
 				{
 					player.addItemtoInventory(player.Loot[2]);
 				}
+				player.stats.attackBonus = player.stats.attackBonusReset;
 				battleHandler.advanceBattleIdent();
 				displayedText.text = story.getNextStoryStep();
 			}
@@ -147,7 +148,7 @@ public class commandExecute : MonoBehaviour {
 			}
 			else if (story.storyStep == 1 && story.stepPart == 0)
 			{
-				if (command == "investigate")
+				if (command == "check")
 				{
 					displayedText.text = story.getNextStepPart();
 				}
@@ -212,7 +213,7 @@ public class commandExecute : MonoBehaviour {
 			}
 			if (story.storyStep == 6 && story.stepPart == 0)
 			{
-				if (command == "search")
+				if (command == "loot")
 				{
 					displayedText.text = story.getNextStepPart();
 					player.addItemtoInventory(player.Loot[1]);
@@ -274,16 +275,33 @@ public class commandExecute : MonoBehaviour {
 
 			if (story.storyStep == 10 && story.stepPart == 0)
 			{
-
 				story.getNextStepPart();
-
-			
 			}
 			if (story.storyStep == 10 && story.stepPart == 1)
 			{
 				if (command == "restart")
 				{
 					player.stats.isAlive = false;
+				}
+			}
+			if (story.storyStep == 13 && story.stepPart == 0)
+			{
+				displayedText.text += "\nName: " + battleHandler.enemies[1].name;
+				displayedText.text += "\nHealth: " + battleHandler.enemies[1].health;
+				displayedText.text += "\nAttack: " + battleHandler.enemies[1].attack;
+				
+				displayedText.text += "\nDefense: " + battleHandler.enemies[1].defense;
+				
+				
+				displayedText.text += "\n>Attack >defend";
+				battle = true;
+			}
+
+			if (story.storyStep == 15 && story.stepPart == 0)
+			{
+				if (command == "credits")
+				{
+					displayedText.text = story.credits;
 				}
 			}
 
@@ -314,14 +332,19 @@ public class BattleHandler
 
 	public BattleHandler()
 	{
-		enemies.Add(new Enemy("goblin",10,11,4)); //health should be 50
+		enemies.Add(new Enemy("goblin", 10, 11, 4)); //health should be 50
+		enemies.Add(new Enemy("King of the Hall", 10, 18, 9)); //health should be 90
 	}
 
 	public bool doBattle(Player player, string command)
 	{
 		if (command == "attack")
 		{
-			player.stats.attackBonus = player.stats.attackBonusReset;
+			player.stats.attackBonus = (int)(player.stats.attackBonus/2);
+			if (player.stats.attackBonus < player.stats.attackBonusReset)
+			{
+				player.stats.attackBonus = player.stats.attackBonusReset;
+			}
 			enemies[battleIdent].health -= player.stats.attack;
 			player.stats.health -= enemies[battleIdent].attack;
 		}
@@ -381,22 +404,24 @@ public class Story
 	public int stepPart;
 	public string[,] storyText = new string[30,30];
 
+	public string credits;
+
 	public Story(int step, int steppart)
 	{
 		this.storyStep = step;
 		this.stepPart = steppart;
 		//Beginning Step
-		storyText[0,0] = "You find yourself in a dark hallway. The cold stone presses itself against your knees as you struggle to stand. You see a distant light... \n\n >continue";
+		storyText[0,0] = "You find yourself in a dark hallway. The cold stone presses itself against your knees as you struggle to stand. You see a distant light... \n\n>continue";
 
 		//Bug Panel Step
-		storyText[1,0] = "You manage to gain your feet, and continue down the hallway towards the faint light. You hear small scratching noises all around you. \n\n >investigate >continue";
-		storyText[1,1] = "Moving slowly closer to the wall on your right to investigate the sound, you realize what you hear is the muffled sound of an insect hive within the wall. \n\n >check >continue";
-		storyText[1,2] = "You slide your hands along the edges of the smooth and slimy stone the wall is made of. The stone is cold, and as you move your hands across it, you come upon a crack. \n\n >check >continue";
-		storyText[1,3] = "You slowly slide your fingers into the crack... \nYou find a switch!\n*CLICK*\n--WHOOSH--\nA panel slides open, revealing a cavity in the wall. The noise of the insects grows considerably.\n You cannot see well, but sense that the cavity is rather small. A small glint of gold near the floor catches your eye.\n\n >take >continue";
+		storyText[1,0] = "You manage to gain your feet, and continue down the hallway towards the faint light. You hear small scratching noises all around you. It is too dim to see anything clearly.\n\n>check >continue";
+		storyText[1,1] = "Moving slowly closer to the wall on your right to investigate the sound, you realize what you hear is a muffled swarm of insects within the wall. \n\n>check >continue";
+		storyText[1,2] = "You slide your hands along the edges of the smooth and slimy stone the wall is made of. The stone is cold, and as you move your hands across it, you come upon a crack. \n\n>check >continue";
+		storyText[1,3] = "You slowly slide your fingers into the crack... \nYou find a switch!\n*CLICK*\n--WHOOSH--\nA panel slides open, revealing a cavity in the wall. The noise of the insects grows considerably.\nYou cannot see well, but sense that the cavity is rather small. A small glint of gold near the floor catches your eye.\n\n>take >continue";
 		storyText[1,4] = "You bend down to grasp the golden object, holding the panel frame with your other hand to steady yourself. You reach down and wrap your fingers slowly around a crown.\nBefore you can pick it up, you feel hundreds of tiny legs begin to cling to you and swarm up your arm. \n\n!!!>take !!!>leave";
 
-		storyText[1,5] = "Instinctively you jerk your hand back fast, still gripping the crown. You frantically shake off the insects that are still clinging to your arm. \nYou feel a sharp pain in your right arm as the last insect tries to latch on to you with its fangs. You snatch it off of your arm, and throw it away. \n>continue";
-		storyText[1,6] = "Instinctively, you jerk your hand back fast, dropping the crown. As the crown hits the ground, it is consumed by the rush of insects flowing away from you. \n>continue";
+		storyText[1,5] = "Instinctively, you jerk your hand back fast, still gripping the crown. You frantically shake off the insects that are still clinging to your arm. \nYou feel a sharp pain in your right arm as the last insect tries to latch on to you with its fangs. You snatch it off of your arm, and throw it away. \n\n>continue";
+		storyText[1,6] = "Instinctively, you jerk your hand back fast, dropping the crown. As the crown hits the ground, it is consumed by the rush of insects flowing away from you. \n\n>continue";
 
 
 		//Step Bug Panel default
@@ -404,17 +429,17 @@ public class Story
 
 
 		//Step Bug Panel Light
-		storyText[3,0] = "As the crown illuminates the panel, you see thousands of beady eyed insects retreat into the crevices in the wall, revealing a half decayed skeleton of an adventurer. The remains are sitting directly across from you. The adventurer's eyes are pits, and is wearing a smile too wide to be pleasant. \n\n>continue  ";
+		storyText[3,0] = "As the crown illuminates the panel, you see thousands of beady eyed insects retreat into the crevices in the wall, revealing a half decayed skeleton of an adventurer. The remains are sitting directly across from you. The adventurer's eyes are pits, and his skull is wearing a smile too wide to be pleasant. \n\n>continue  ";
 
 		//Step filler 
 		storyText[4,0] = "The dim light at the end of the hallway grows nearer. \n\n>continue";
 
 		//Step finds body
 		storyText[5,0] = "You find a body lying on the ground off to the side of the hallway. \n\n>loot >continue";
-		storyText[5,1] = "You run your hands along the pockets of the corpe's armor to search for anything useful. You find a small green gem that seems to electrify your arm as you roll it around in your palm. \nThe gem dissolves in your hand and the remaining dust melds into your skin. The emerald hue of the crystal travels up your arm until you feel a burning sensation surge to your heart.\n\n>continue";
+		storyText[5,1] = "You run your hands along the pockets of the corpse's armor to search for anything useful. You find a small green gem that seems to electrify your arm as you roll it around in your palm. \nThe gem dissolves in your hand and the remaining dust melds into your skin. The emerald hue of the crystal travels up your arm until you feel a burning sensation surge to your heart.\n\n>continue";
 
 		//step crates
-		storyText[6,0] = "You continue down the hallway. The dim light at the end of the hallway grows nearer still. You come across a stack of crates.\n\n>search >continue";
+		storyText[6,0] = "You continue down the hallway. The dim light at the end of the hallway grows nearer still. You come across a stack of crates.\n\n>loot >continue";
 		storyText[6,1] = "You find a lantern and the means to light it!\n\n>continue";
 
 		//step first battle!
@@ -424,7 +449,7 @@ public class Story
 		storyText[8,0] = "the battle is over! You won and gained shortsword!\n\n>continue";
 
 		//step trap if light
-		storyText[9,0] = "You spot a trap! The trap has already killed a previous adventurer, and if disarmed, you may be able to loot their armor.\n\n>disarm >continue";
+		storyText[9,0] = "You spot a trap! It is completely blocking your safe advancement down the hallway. The trap has killed a previous adventurer, and if disarmed, you may be able to loot their armor.\n\n>disarm >continue";
 		storyText[9,1] = "You disarmed the trap! \n\n>loot >continue";
 		storyText[9,2] = "You looted the body and got armor! \n\n>continue";
 
@@ -433,10 +458,19 @@ public class Story
 		storyText[10,1] = "BLERGH";
 
 		//step got past trap
-		storyText[11,0] = "Continued past the trap\n\n>continue";
+		storyText[11,0] = "You continue safely past the trap after it is disarmed.\n\n>continue";
 
 
-		storyText[12,0] = "You enter a huge cavern and before you is the King of the Hall!";
+		storyText[12,0] = "You enter a huge cavern and before you is the King of the Hall! \nReady yourself before continuing!\n\n>continue\n";
+
+		//actual battle time
+		storyText[13,0] = "He laughs, and bellows \"Fool, you cannot defeat me!\"";
+
+		storyText[14,0] = "\"Ahhhhh you have defeated me! I will one day have my revenge!\"\nSuddenly a portal illuminates the entirety of the cavern, and the King of the Hall flies backwards into it. The roof caves in near the back of the cavern, revealing a stairwell lit by a shaft of sunlight.\n\n>continue";
+
+		storyText[15,0] = "You have defeated the King of the Hall and escaped the hallway! Thanks for playing!\n\n>credits";
+
+		credits = "These are the credits";
 
 	}
 
