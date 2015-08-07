@@ -332,8 +332,8 @@ public class BattleHandler
 
 	public BattleHandler()
 	{
-		enemies.Add(new Enemy("goblin", 10, 11, 4)); //health should be 50
-		enemies.Add(new Enemy("King of the Hall", 10, 18, 9)); //health should be 90
+		enemies.Add(new Enemy("goblin", 30, 11, 3)); //health should be 30
+		enemies.Add(new Enemy("King of the Hall", 60, 18, 7)); //health should be 60
 	}
 
 	public bool doBattle(Player player, string command)
@@ -350,8 +350,8 @@ public class BattleHandler
 		}
 		if (command == "defend")
 		{
-			if (player.stats.attackBonus < 10)
-				player.stats.attackBonus += (int)Random.Range(1,4);
+			if (player.stats.attackBonus < (15 + player.stats.attackBonusReset))
+				player.stats.attackBonus += (int)Random.Range(1,5);
 			if (enemies[battleIdent].attack-player.stats.defense  > 0)
 				player.stats.health -= (enemies[battleIdent].attack-player.stats.defense);
 		}
